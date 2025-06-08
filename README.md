@@ -264,5 +264,4 @@ The bundle allows you to show or hide form fields based on answers to previous q
 - **`JsonToFormTransformer`** - Main service to transform JSON to form
 - **`FormGeneratorService`** - Advanced form construction
 - **`QuestionConditionEvaluator`** - Visibility conditions management
-- **`FormStateManager`** - Session state management
 

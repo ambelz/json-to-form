@@ -12,5 +12,5 @@ services:
 
     Ambelz\JsonToFormBundle\Service\QuestionConditionEvaluator: ~
     Ambelz\JsonToFormBundle\Service\FormGeneratorService: ~
-    Ambelz\JsonToFormBundle\Service\FormStateManager: ~
     Ambelz\JsonToFormBundle\Service\JsonToFormTransformer: ~
+    Ambelz\JsonToFormBundle\Service\FormStateManager: ~
