@@ -1,10 +1,10 @@
 <?php
 
-namespace TimeSplitters\JsonFormBundle\Service;
+namespace Ambelz\JsonToFormBundle\Service;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
-use TimeSplitters\JsonFormBundle\Service\FormGeneratorService;
+use Ambelz\JsonToFormBundle\Service\FormGeneratorService;
 
 /**
  * Main service to transform a JSON structure into a Symfony form

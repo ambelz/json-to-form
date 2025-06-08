@@ -1,5 +1,5 @@
 {
-    "name": "timesplitters/json-to-form",
+    "name": "ambelz/json-to-form",
     "description": "Symfony bundle to transform JSON structures into forms",
     "type": "symfony-bundle",
     "license": "Apache-2.0",
@@ -20,12 +20,12 @@
     },
     "autoload": {
         "psr-4": {
-            "TimeSplitters\\JsonFormBundle\\": "src/"
+            "Ambelz\\JsonToFormBundle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "TimeSplitters\\JsonFormBundle\\Tests\\": "tests/"
+            "Ambelz\\JsonToFormBundle\\Tests\\": "tests/"
         }
     },
     "extra": {

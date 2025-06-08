@@ -7,10 +7,10 @@ services:
         autowire: true
         autoconfigure: true
 
-    TimeSplitters\JsonFormBundle\Service\:
+    Ambelz\JsonToFormBundle\Service\:
         resource: '../../Service/'
 
-    TimeSplitters\JsonFormBundle\Service\QuestionConditionEvaluator: ~
-    TimeSplitters\JsonFormBundle\Service\FormGeneratorService: ~
-    TimeSplitters\JsonFormBundle\Service\FormStateManager: ~
-    TimeSplitters\JsonFormBundle\Service\JsonToFormTransformer: ~
+    Ambelz\JsonToFormBundle\Service\QuestionConditionEvaluator: ~
+    Ambelz\JsonToFormBundle\Service\FormGeneratorService: ~
+    Ambelz\JsonToFormBundle\Service\FormStateManager: ~
+    Ambelz\JsonToFormBundle\Service\JsonToFormTransformer: ~

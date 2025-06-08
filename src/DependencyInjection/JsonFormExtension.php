@@ -1,6 +1,6 @@
 <?php
 
-namespace TimeSplitters\JsonFormBundle\DependencyInjection;
+namespace Ambelz\JsonToFormBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,6 +22,6 @@ class JsonFormExtension extends Extension
 
     public function getAlias(): string
     {
-        return 'timesplitters_json_to_form';
+        return 'ambelz_json_to_form';
     }
 }

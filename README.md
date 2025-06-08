@@ -7,7 +7,7 @@ Symfony bundle to transform JSON structures into dynamic forms with Live Compone
 ## Installation
 
 ```bash
-composer require timesplitters/json-to-form
+composer require ambelz/json-to-form
 ```
 
 Add the bundle in `config/bundles.php`:
@@ -15,7 +15,7 @@ Add the bundle in `config/bundles.php`:
 ```php
 return [
     // ...
-    TimeSplitters\JsonFormBundle\JsonFormBundle::class => ['all' => true],
+    Ambelz\JsonToFormBundle\JsonFormBundle::class => ['all' => true],
 ];
 ```
 
@@ -66,7 +66,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use TimeSplitters\JsonFormBundle\Service\JsonToFormTransformer;
+use Ambelz\JsonToFormBundle\Service\JsonToFormTransformer;
 
 class MyController extends AbstractController
 {

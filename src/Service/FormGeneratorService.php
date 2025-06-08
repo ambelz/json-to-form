@@ -1,6 +1,6 @@
 <?php
 
-namespace TimeSplitters\JsonFormBundle\Service;
+namespace Ambelz\JsonToFormBundle\Service;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;

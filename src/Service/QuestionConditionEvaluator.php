@@ -1,6 +1,6 @@
 <?php
 
-namespace TimeSplitters\JsonFormBundle\Service;
+namespace Ambelz\JsonToFormBundle\Service;
 
 /**
  * Service specialized in evaluating question visibility conditions

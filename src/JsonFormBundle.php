@@ -7,11 +7,11 @@
  * @license Apache-2.0
  */
 
-namespace TimeSplitters\JsonFormBundle;
+namespace Ambelz\JsonToFormBundle;
 
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use TimeSplitters\JsonFormBundle\DependencyInjection\JsonFormExtension;
+use Ambelz\JsonToFormBundle\DependencyInjection\JsonFormExtension;
 
 /**
  * Main bundle for JSON to Symfony forms transformation
