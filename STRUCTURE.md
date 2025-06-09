@@ -1,6 +1,6 @@
 # JSON Structure Format
 
-This document describes the complete JSON structure format supported by the TimeSplitters JSON Form bundle.
+This document describes the complete JSON structure format supported by the JSON Form bundle.
 
 ## 📋 Root Structure
 
