@@ -94,10 +94,15 @@ class FormGeneratorService
             $sectionKey      = $section['slug'];
             $sectionLabel    = $section['title'] ?? ucfirst($sectionKey);
 
+            $sectionAttr = $structure['displayOptions']['sections']['attr'] ?? [];
+            $sectionLabelAttr = $structure['displayOptions']['sections']['label_attr'] ?? [];
+            
             // Section builder (inherit_data=true to avoid creating an additional data level)
             $sectionBuilder = $dynBuilder->create($sectionKey, FormType::class, [
                 'label'        => $sectionLabel,
                 'inherit_data' => true,
+                'attr' => $sectionAttr,
+                'label_attr' => $sectionLabelAttr,
             ]);
 
             foreach ($section['categories'] as $index => $category) {
@@ -107,10 +112,15 @@ class FormGeneratorService
                 $categoryKey   = $category['slug'];
                 $categoryLabel = $category['title'] ?? ucfirst($categoryKey);
 
+                $categoryAttr = $structure['displayOptions']['categories']['attr'] ?? [];
+                $categoryLabelAttr = $structure['displayOptions']['categories']['label_attr'] ?? [];
+                
                 // Category builder (inherit_data=true to avoid creating an additional data level)
                 $categoryBuilder = $sectionBuilder->create($categoryKey, FormType::class, [
                     'label'        => $categoryLabel,
                     'inherit_data' => true,
+                    'attr' => $categoryAttr,
+                    'label_attr' => $categoryLabelAttr,
                 ]);
 
                 if (isset($category['questions']) && is_array($category['questions'])) {
