@@ -223,6 +223,9 @@ class FormGeneratorService
             case TimeType::class:
                 $options['data'] = $value instanceof \DateTime ? $value : new \DateTime($value);
                 break;
+            case CheckboxType::class:
+                $options['data'] = (bool)$value;
+                break;
             default:
                 $options['data'] = $value;
         }
