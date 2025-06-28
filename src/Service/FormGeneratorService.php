@@ -203,6 +203,11 @@ class FormGeneratorService
         $options['required'] = $question['required'] ?? false;
 
         $value = $formData[$fieldName] ?? $question['data'] ?? null;
+        if (is_array($value) && 
+            (!isset($options['multiple']) || $options['multiple'] === false)
+            ) {
+            $value = null;
+        }
 
         // Adapt the value according to the field type
         switch ($type) {
@@ -213,10 +218,18 @@ class FormGeneratorService
                 $options['data'] = is_numeric($value) ? (float) $value : $value;
                 break;
             case FileType::class:
+                // Ensure Symfony does not expect a File instance when we only have a stored reference (string/array)
+                $options['data_class'] = null;
+                $options['empty_data'] = null;
+
                 if ($value instanceof \Symfony\Component\HttpFoundation\File\File) {
+                    // A File object was provided (e.g., when editing after upload)
                     $options['data'] = $value;
-                    }
-                    break;
+                } else {
+                    // Remove any non-File default value to prevent view data exception
+                    unset($options['data']);
+                }
+                break;
                 
             case DateTimeType::class:
             case DateType::class:
