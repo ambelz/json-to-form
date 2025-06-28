@@ -2,7 +2,7 @@
 
 **Author:** Christophe Abillama <christophe.abillama@gmail.com>
 
-Symfony bundle to transform JSON structures into dynamic forms with Live Components.
+Symfony bundle to transform JSON structures into forms.
 
 ## Installation
 
@@ -256,6 +256,14 @@ You can configure submit buttons at the section level in your JSON. This allows 
 ## Conditional Display Dependencies
 
 The bundle allows you to show or hide form fields based on answers to previous questions using the `displayDependencies` property. You can define complex conditions using logical and comparison operators.
+
+### Static vs dynamic dependencies
+
+* **Inter-section dependencies (static)** – Conditions that depend on answers located in **previous sections** are evaluated server-side when the next section is generated. This works out-of-the-box with pure Symfony Forms: if the condition is not met, the dependent question (or entire section) is simply not included in the rendered form.
+* **Intra-section dependencies (dynamic)** – Conditions that target questions **inside the same section** require the form to be refreshed immediately after the user changes a value. To offer the best user experience the bundle **recommends** integrating a reactive layer such as **Symfony UX LiveComponent** (or any JavaScript framework) in your host project. Without such a layer all questions are rendered, but only those matching the initial conditions are visible.
+
+> **Tip :** If `symfony/ux-live-component` is installed, you can wire your component so that the form re-renders automatically on change, unlocking a fully dynamic experience while keeping the bundle itself free of hard dependencies.
+
 
 > **Documentation:** For a detailed explanation, examples, and a full list of supported operators, see the [Conditional Display Dependencies (displayDependencies)](STRUCTURE.md#conditional-display-dependencies-displaydependencies) documentation in `STRUCTURE.md`.
 
