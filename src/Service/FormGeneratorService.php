@@ -218,13 +218,30 @@ class FormGeneratorService
                 $options['data'] = is_numeric($value) ? (float) $value : $value;
                 break;
             case FileType::class:
-                // Ensure Symfony does not expect a File instance when we only have a stored reference (string/array)
                 $options['data_class'] = null;
                 $options['empty_data'] = null;
 
-                if ($value instanceof \Symfony\Component\HttpFoundation\File\File) {
-                    // A File object was provided (e.g., when editing after upload)
-                    $options['data'] = $value;
+                if (is_string($value) && !empty($value)) {
+                    // A file path was provided (file already uploaded)
+                    // Add custom attributes to display the existing file
+                    $fileName = basename($value);
+                    $options['attr'] = array_merge($options['attr'] ?? [], [
+                        'data-existing-file' => $value,
+                        'data-existing-file-name' => $fileName,
+                        'class' => ($options['attr']['class'] ?? '') . ' has-existing-file'
+                    ]);
+                    
+                    // Add help text to show the existing file
+                    if(str_starts_with(strtolower($value), 'c:\fakepath')){
+                        $help = '<span class="font-bold text-success">Fichier sélectionné <i class="fas fa-check-circle"></i></span>';
+                    } else {
+                        $help = '<a href="'.$value.'" target="_blank" class="font-bold text-success">Fichier sélectionné <i class="fas fa-check-circle"></i></a>';
+                    }
+                    $options['help'] = $help.'<br><small class="text-muted">Laissez vide pour conserver le fichier actuel, ou sélectionnez un nouveau fichier pour le remplacer.</small>';
+                    $options['help_html'] = true;
+                    
+                    // Remove the data to prevent view data exception
+                    unset($options['data']);
                 } else {
                     // Remove any non-File default value to prevent view data exception
                     unset($options['data']);
