@@ -13,7 +13,10 @@
         "php": ">=8.2",
         "symfony/framework-bundle": "^7.0",
         "symfony/form": "^7.0",
-        "symfony/property-access": "^7.0"
+        "symfony/property-access": "^7.0",
+        "symfony/ux-dropzone": "^2.27",
+        "symfony/ux-live-component": "^2.27",
+        "symfony/validator": "^7.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0"

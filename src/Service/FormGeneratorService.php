@@ -27,15 +27,16 @@ use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfonycasts\DynamicForms\DynamicFormBuilder;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\UX\LiveComponent\Form\Type\LiveCollectionType;
+use Ambelz\JsonToFormBundle\Form\Type\CollectionEntryType;
+use Symfony\Component\Form\FormBuilder;
 
 /**
  * Symfony form generation service from JSON structures
@@ -55,11 +56,10 @@ class FormGeneratorService
      * @param PropertyAccessorInterface $propertyAccessor Used to access properties in complex objects
      */
     public function __construct(
-        private QuestionConditionEvaluator $conditionEvaluator, 
+        private QuestionConditionEvaluator $conditionEvaluator,
         private PropertyAccessorInterface $propertyAccessor
-    ) {
-    }
-    
+    ) {}
+
     /**
      * Dynamically builds a Symfony form from a JSON structure.
      * 
@@ -73,13 +73,13 @@ class FormGeneratorService
      * 
      * @param FormBuilderInterface $builder The form builder
      * @param array $structure The JSON structure of the form
-     * @param array $formData Form data for dependencies and conditional logic
      * @return FormInterface The built form with all fields and validation rules
      * @throws \InvalidArgumentException If the structure is invalid
      */
-    public function buildForm(FormBuilderInterface $builder, array $structure, array $formData = []): FormInterface
+    public function buildForm(FormBuilderInterface $builder, array $structure): FormInterface
     {
-        $dynBuilder = new DynamicFormBuilder($builder);
+        $dynBuilder = $builder;
+        $formData = $dynBuilder->getData();
 
         if (!isset($structure['sections']) || !isset($structure['slug'])) {
             throw new \InvalidArgumentException("The JSON structure of the form must contain at least one section and a 'slug' field.");
@@ -96,7 +96,7 @@ class FormGeneratorService
 
             $sectionAttr = $structure['displayOptions']['sections']['attr'] ?? [];
             $sectionLabelAttr = $structure['displayOptions']['sections']['label_attr'] ?? [];
-            
+
             // Section builder (inherit_data=true to avoid creating an additional data level)
             $sectionBuilder = $dynBuilder->create($sectionKey, FormType::class, [
                 'label'        => $sectionLabel,
@@ -114,29 +114,30 @@ class FormGeneratorService
 
                 $categoryAttr = $structure['displayOptions']['categories']['attr'] ?? [];
                 $categoryLabelAttr = $structure['displayOptions']['categories']['label_attr'] ?? [];
-                
+
                 // Category builder (inherit_data=true to avoid creating an additional data level)
                 $categoryBuilder = $sectionBuilder->create($categoryKey, FormType::class, [
                     'label'        => $categoryLabel,
                     'inherit_data' => true,
                     'attr' => $categoryAttr,
                     'label_attr' => $categoryLabelAttr,
+                    'data' => $dynBuilder->getData()
                 ]);
 
                 if (isset($category['questions']) && is_array($category['questions'])) {
                     foreach ($category['questions'] as $question) {
                         $formData[$question['key']] = $formData[$question['key']] ?? $question['data'] ?? null;
-                        $this->addQuestion($categoryBuilder, $question, $formData);
+                        $this->addQuestion($categoryBuilder, $question, $formData[$question['key']]);
                     }
                 }
-                
+
                 $sectionBuilder->add($categoryBuilder);
             }
 
             // Automatically add a submit button at the end of the section if configured
             if (isset($section['submit']) && is_array($section['submit'])) {
                 $submitLabel = $section['submit']['label'] ?? 'Send';
-                
+
                 $submitAttrs = ['class' => 'btn btn-primary'];
                 if (isset($section['submit']['class'])) {
                     $submitAttrs['class'] = $section['submit']['class'];
@@ -144,12 +145,12 @@ class FormGeneratorService
                 if (isset($section['submit']['attr']) && is_array($section['submit']['attr'])) {
                     $submitAttrs = array_merge($submitAttrs, $section['submit']['attr']);
                 }
-                
+
                 $sectionBuilder->add('submit', SubmitType::class, [
                     'label' => $submitLabel,
                     'attr' => $submitAttrs
                 ]);
-                
+
                 $hasSubmitButton = true;
             }
 
@@ -183,31 +184,47 @@ class FormGeneratorService
      * 
      * @param FormBuilderInterface $builder The form builder to add the field to
      * @param array $question The question configuration with key, type, and options
-     * @param array $formData Form data for evaluating dependencies and conditions
      * @throws \InvalidArgumentException If the question configuration is invalid
      */
-    public function addQuestion(FormBuilderInterface $builder, array $question, array $formData = []): void
+    public function addQuestion(FormBuilderInterface $builder, array $question, mixed $value): void
+    {
+        $formData = $builder->getData();
+
+        // Get field definition
+        [$fieldName, $type, $options] = $this->getFieldOptions($question, $value);
+
+        $dependencies = $question['displayDependencies'] ?? [];
+        if (!empty($dependencies) && isset($dependencies['operator'], $dependencies['conditions'])) {
+            if ($this->conditionEvaluator->shouldDisplay($dependencies, $formData)) {
+                $builder->add($fieldName, $type, $options);
+            }
+        } else {
+            $builder->add($fieldName, $type, $options);
+        }
+    }
+
+    /**
+     * Builds complete field options from a question configuration
+     * 
+     * @param array $question The question configuration with key, type, and options
+     * @param mixed $value The default value for the field
+     * @return array [fieldName, type, options]
+     */
+    public function getFieldOptions(array $question, mixed $value): array
     {
         if (!isset($question['key']) || !isset($question['type'])) {
             throw new \InvalidArgumentException("Each question must have at least a 'key' and a 'type'.");
         }
 
         $fieldName = $question['key'];
+        $type = $this->mapType($question['type']);
         unset($question['key']);
-        $type      = $this->mapType($question['type']);
         unset($question['type']);
-        
+
         $options = $question;
         // Ensure that basic options are defined
         $options['label']    = $question['label'] ?? ucfirst($fieldName);
         $options['required'] = $question['required'] ?? false;
-
-        $value = $formData[$fieldName] ?? $question['data'] ?? null;
-        if (is_array($value) && 
-            (!isset($options['multiple']) || $options['multiple'] === false)
-            ) {
-            $value = null;
-        }
 
         // Adapt the value according to the field type
         switch ($type) {
@@ -230,16 +247,17 @@ class FormGeneratorService
                         'data-existing-file-name' => $fileName,
                         'class' => ($options['attr']['class'] ?? '') . ' has-existing-file'
                     ]);
-                    
+
                     // Add help text to show the existing file
-                    if(str_starts_with(strtolower($value), 'c:\fakepath')){
+                    // TODO : find a better way to detect the user has just selected a file
+                    if (str_starts_with(strtolower($value), 'c:\fakepath')) {
                         $help = '<span class="font-bold text-success">Fichier sélectionné <i class="fas fa-check-circle"></i></span>';
                     } else {
-                        $help = '<a href="'.$value.'" target="_blank" class="font-bold text-success">Fichier sélectionné <i class="fas fa-check-circle"></i></a>';
+                        $help = '<a href="' . $value . '" target="_blank" class="font-bold text-success">Fichier sélectionné <i class="fas fa-check-circle"></i></a>';
                     }
-                    $options['help'] = $help.'<br><small class="text-muted">Laissez vide pour conserver le fichier actuel, ou sélectionnez un nouveau fichier pour le remplacer.</small>';
+                    $options['help'] = $help . '<br><small class="text-muted">Laissez vide pour conserver le fichier actuel, ou sélectionnez un nouveau fichier pour le remplacer.</small>';
                     $options['help_html'] = true;
-                    
+
                     // Remove the data to prevent view data exception
                     unset($options['data']);
                 } else {
@@ -247,7 +265,7 @@ class FormGeneratorService
                     unset($options['data']);
                 }
                 break;
-                
+
             case DateTimeType::class:
             case DateType::class:
             case TimeType::class:
@@ -256,24 +274,51 @@ class FormGeneratorService
             case CheckboxType::class:
                 $options['data'] = (bool)$value;
                 break;
+            case ChoiceType::class:
+                if (
+                    is_array($value) &&
+                    (!isset($options['multiple']) || $options['multiple'] === false)
+                ) {
+                    $value = null;
+                }
+                break;
+            case LiveCollectionType::class:
+                $options['data'] = is_array($value) ? $value : [];
+
+                if (!isset($question['fields']) || !is_array($question['fields']) || empty($question['fields'])) {
+                    throw new \InvalidArgumentException(
+                        "Collection type '{$fieldName}' must have a 'fields' parameter with at least one field definition."
+                    );
+                }
+
+                // Configure entry type and sub-fields
+                $options['entry_type'] = CollectionEntryType::class;
+                $options['entry_options'] = [
+                    'fields' => $question['fields'],
+                    'label'  => false,
+                ];
+                break;
             default:
                 $options['data'] = $value;
         }
 
-        if (isset($question['constraints'])) {
-            $constraints = $question['constraints'];
-            $options['constraints'] = $this->buildConstraints($constraints);
+        // Handle constraints
+        $constraints = $question['constraints'] ?? [];
+
+        // Automatically add NotBlank constraint for required fields
+        if ($options['required'] === true && !isset($constraints['NotBlank'])) {
+            $constraints['NotBlank'] = ['message' => 'Ce champ est obligatoire.'];
         }
 
-        $dependencies = $question['displayDependencies'] ?? [];
-        unset($options['displayDependencies']);
-        if (!empty($dependencies) && isset($dependencies['operator'], $dependencies['conditions'])) {
-            if($this->conditionEvaluator->shouldDisplay($dependencies, $formData)){
-                $builder->add($fieldName, $type, $options);
-            }
-        } else {
-            $builder->add($fieldName, $type, $options);
+        if (!empty($constraints)) {
+            $options['constraints'] = self::buildConstraints($constraints);
         }
+
+        // Clean up options that shouldn't be passed to form builder
+        unset($options['displayDependencies']);
+        unset($options['fields']);
+
+        return [$fieldName, $type, $options];
     }
 
     /**
@@ -289,7 +334,7 @@ class FormGeneratorService
      * @return array Array of instantiated Symfony constraint objects
      * @throws \InvalidArgumentException If a constraint class doesn't exist or is invalid
      */
-    private function buildConstraints(array $constraintsConfig): array
+    public static function buildConstraints(array $constraintsConfig): array
     {
         $constraints = [];
 
@@ -303,7 +348,7 @@ class FormGeneratorService
             if (!is_subclass_of($fqcn, Constraint::class)) {
                 throw new \InvalidArgumentException("$fqcn is not a valid Symfony Constraint.");
             }
-            
+
             // For constraints like Length, NotBlank, etc., we directly pass the options
             // without using OptionsResolver which can be too strict
             if (is_array($options)) {
@@ -331,30 +376,30 @@ class FormGeneratorService
     private function mapType(string $type): string
     {
         return match ($type) {
-            'text'      => TextType::class,
-            'email'     => EmailType::class,
+            'text'       => TextType::class,
+            'email'      => EmailType::class,
             'number',
-            'integer'   => IntegerType::class,
-            'date'      => DateType::class,
-            'datetime'  => DateTimeType::class,
-            'time'      => TimeType::class,
-            'url'       => UrlType::class,
-            'tel'       => TelType::class,
-            'search'    => SearchType::class,
-            'password'  => PasswordType::class,
-            'range'     => RangeType::class,
-            'percent'   => PercentType::class,
-            'money'     => MoneyType::class,
-            'country'   => CountryType::class,
-            'language'  => LanguageType::class,
-            'locale'    => LocaleType::class,
-            'currency'  => CurrencyType::class,
-            'checkbox'  => CheckboxType::class,
-            'radio'     => RadioType::class,
-            'choice'    => ChoiceType::class,
-            'file'      => FileType::class,
-            'collection'=> CollectionType::class,
-            default     => TextType::class,
+            'integer'    => IntegerType::class,
+            'date'       => DateType::class,
+            'datetime'   => DateTimeType::class,
+            'time'       => TimeType::class,
+            'url'        => UrlType::class,
+            'tel'        => TelType::class,
+            'search'     => SearchType::class,
+            'password'   => PasswordType::class,
+            'range'      => RangeType::class,
+            'percent'    => PercentType::class,
+            'money'      => MoneyType::class,
+            'country'    => CountryType::class,
+            'language'   => LanguageType::class,
+            'locale'     => LocaleType::class,
+            'currency'   => CurrencyType::class,
+            'checkbox'   => CheckboxType::class,
+            'radio'      => RadioType::class,
+            'choice'     => ChoiceType::class,
+            'file'       => FileType::class,
+            'collection' => LiveCollectionType::class,
+            default      => TextType::class,
         };
     }
 

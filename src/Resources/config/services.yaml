@@ -13,3 +13,9 @@ services:
     Ambelz\JsonToFormBundle\Service\QuestionConditionEvaluator: ~
     Ambelz\JsonToFormBundle\Service\FormGeneratorService: ~
     Ambelz\JsonToFormBundle\Service\JsonToFormTransformer: ~
+
+    Ambelz\JsonToFormBundle\Form\Type\CollectionEntryType:
+        arguments:
+            $formGeneratorService: '@Ambelz\JsonToFormBundle\Service\FormGeneratorService'
+        tags:
+            - { name: form.type }
