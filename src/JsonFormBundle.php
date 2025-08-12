@@ -2,7 +2,7 @@
 
 /**
  * Symfony bundle to transform JSON structures into dynamic forms
- * 
+ *
  * @author Christophe Abillama <christophe.abillama@gmail.com>
  * @license Apache-2.0
  */

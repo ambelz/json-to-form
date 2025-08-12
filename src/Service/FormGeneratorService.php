@@ -37,37 +37,38 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * Symfony form generation service from JSON structures
- * 
+ *
  * This service allows dynamic creation of Symfony forms based on JSON configuration.
  * It supports nested sections, categories, and questions with various field types,
  * constraints, and conditional display logic.
- * 
+ *
  * @author Christophe Abillama <christophe.abillama@gmail.com>
  */
 class FormGeneratorService
 {
     /**
      * Constructor initializes the form generator with its required dependencies
-     * 
+     *
      * @param QuestionConditionEvaluator $conditionEvaluator Used to evaluate conditional display logic
      * @param PropertyAccessorInterface $propertyAccessor Used to access properties in complex objects
      */
     public function __construct(
         private QuestionConditionEvaluator $conditionEvaluator,
         private PropertyAccessorInterface $propertyAccessor
-    ) {}
+    ) {
+    }
 
     /**
      * Dynamically builds a Symfony form from a JSON structure.
-     * 
+     *
      * This method processes the entire form structure, organizing it into sections and categories.
      * It handles the hierarchical structure of the form and delegates the creation of individual
      * form fields to the addQuestion method.
-     * 
+     *
      * The expected JSON structure should contain:
      * - slug: A unique identifier for the form
      * - sections: An array of form sections, each containing categories and questions
-     * 
+     *
      * @param FormBuilderInterface $builder The form builder
      * @param array $structure The JSON structure of the form
      * @return FormInterface The built form with all fields and validation rules
@@ -129,7 +130,7 @@ class FormGeneratorService
                         $questionAttr = $question['attr'] ?? $structure['displayOptions']['questions']['attr'] ?? [];
                         $question['label_attr'] = $questionLabelAttr;
                         $question['attr'] = $questionAttr;
-                        
+
                         $this->addQuestion($categoryBuilder, $question, $formData[$question['key']]);
                     }
                 }
@@ -174,7 +175,7 @@ class FormGeneratorService
 
     /**
      * Adds a question to the form while managing its dependencies
-     * 
+     *
      * This method processes a single form field ("question") configuration and adds it to the form.
      * It handles:
      * - Field type mapping from simple strings to Symfony form types
@@ -183,7 +184,7 @@ class FormGeneratorService
      * - Choices for select/radio/checkbox fields
      * - Validation constraints
      * - Conditional display logic based on other field values
-     * 
+     *
      * @param FormBuilderInterface $builder The form builder to add the field to
      * @param array $question The question configuration with key, type, and options
      * @throws \InvalidArgumentException If the question configuration is invalid
@@ -207,7 +208,7 @@ class FormGeneratorService
 
     /**
      * Builds complete field options from a question configuration
-     * 
+     *
      * @param array $question The question configuration with key, type, and options
      * @param mixed $value The default value for the field
      * @return array [fieldName, type, options]
@@ -325,13 +326,13 @@ class FormGeneratorService
 
     /**
      * Builds validation constraints from configuration
-     * 
+     *
      * This method dynamically creates Symfony validation constraints from a configuration array.
      * It supports all standard Symfony constraints and allows passing options to them.
-     * 
+     *
      * Example configuration:
      * ["NotBlank" => ["message" => "This field cannot be empty"], "Length" => ["min" => 5]]
-     * 
+     *
      * @param array $constraintsConfig Array of constraint configurations
      * @return array Array of instantiated Symfony constraint objects
      * @throws \InvalidArgumentException If a constraint class doesn't exist or is invalid
@@ -367,11 +368,11 @@ class FormGeneratorService
 
     /**
      * Maps simple type strings to Symfony form type classes
-     * 
+     *
      * This method converts user-friendly type names (like 'email', 'date') to their
      * corresponding Symfony form type class names. This allows the JSON configuration
      * to use simple strings instead of fully qualified class names.
-     * 
+     *
      * @param string $type Simple type name to map
      * @return string Fully qualified class name of the Symfony form type
      */
@@ -409,11 +410,11 @@ class FormGeneratorService
 
     /**
      * Determines if an array is associative (has string keys) or sequential (has numeric keys)
-     * 
+     *
      * This helper method is used to properly handle choices in select/radio/checkbox fields.
      * Associative arrays are treated as key-value pairs, while sequential arrays are treated
      * as having the same key and value.
-     * 
+     *
      * @param array $array The array to check
      * @return bool True if the array is associative, false if it's sequential
      */

@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * Extension for the bundle configuration
- * 
+ *
  * @author Christophe Abillama <christophe.abillama@gmail.com>
  */
 class JsonFormExtension extends Extension
