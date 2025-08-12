@@ -2,41 +2,38 @@
 
 namespace Ambelz\JsonToFormBundle\Service;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\CountryType;
-use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\LanguageType;
-use Symfony\Component\Form\Extension\Core\Type\LocaleType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\PercentType;
-use Symfony\Component\Form\Extension\Core\Type\RadioType;
-use Symfony\Component\Form\Extension\Core\Type\RangeType;
-use Symfony\Component\Form\Extension\Core\Type\SearchType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfonycasts\DynamicForms\DynamicFormBuilder;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\UX\LiveComponent\Form\Type\LiveCollectionType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
+use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Ambelz\JsonToFormBundle\Form\Type\CollectionEntryType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\LocaleType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\UX\LiveComponent\Form\Type\LiveCollectionType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\PercentType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\LanguageType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * Symfony form generation service from JSON structures
@@ -86,6 +83,7 @@ class FormGeneratorService
         }
 
         $hasSubmitButton = false;
+        $mode = $structure['displayOptions']['mode'] ?? 'steps';
 
         foreach ($structure['sections'] as $section) {
             if (!isset($section['slug']) || !is_string($section['slug']) || empty(trim($section['slug']))) {
@@ -127,6 +125,11 @@ class FormGeneratorService
                 if (isset($category['questions']) && is_array($category['questions'])) {
                     foreach ($category['questions'] as $question) {
                         $formData[$question['key']] = $formData[$question['key']] ?? $question['data'] ?? null;
+                        $questionLabelAttr = $question['label_attr'] ?? $structure['displayOptions']['questions']['label_attr'] ?? [];
+                        $questionAttr = $question['attr'] ?? $structure['displayOptions']['questions']['attr'] ?? [];
+                        $question['label_attr'] = $questionLabelAttr;
+                        $question['attr'] = $questionAttr;
+                        
                         $this->addQuestion($categoryBuilder, $question, $formData[$question['key']]);
                     }
                 }
@@ -134,8 +137,9 @@ class FormGeneratorService
                 $sectionBuilder->add($categoryBuilder);
             }
 
+            $dynBuilder->add($sectionBuilder);
             // Automatically add a submit button at the end of the section if configured
-            if (isset($section['submit']) && is_array($section['submit'])) {
+            if (isset($section['submit']) && is_array($section['submit']) && $mode === 'steps') {
                 $submitLabel = $section['submit']['label'] ?? 'Send';
 
                 $submitAttrs = ['class' => 'btn btn-primary'];
@@ -146,15 +150,13 @@ class FormGeneratorService
                     $submitAttrs = array_merge($submitAttrs, $section['submit']['attr']);
                 }
 
-                $sectionBuilder->add('submit', SubmitType::class, [
+                $dynBuilder->add('submit', SubmitType::class, [
                     'label' => $submitLabel,
                     'attr' => $submitAttrs
                 ]);
 
                 $hasSubmitButton = true;
             }
-
-            $dynBuilder->add($sectionBuilder);
         }
 
         // Add a default submit button at the end if no section has configured one
@@ -376,29 +378,31 @@ class FormGeneratorService
     private function mapType(string $type): string
     {
         return match ($type) {
-            'text'       => TextType::class,
-            'email'      => EmailType::class,
-            'number',
-            'integer'    => IntegerType::class,
+            'checkbox'   => CheckboxType::class,
+            'choice'     => ChoiceType::class,
+            'collection' => LiveCollectionType::class,
+            'country'    => CountryType::class,
+            'currency'   => CurrencyType::class,
             'date'       => DateType::class,
             'datetime'   => DateTimeType::class,
-            'time'       => TimeType::class,
-            'url'        => UrlType::class,
-            'tel'        => TelType::class,
-            'search'     => SearchType::class,
-            'password'   => PasswordType::class,
-            'range'      => RangeType::class,
-            'percent'    => PercentType::class,
-            'money'      => MoneyType::class,
-            'country'    => CountryType::class,
+            'email'      => EmailType::class,
+            'file'       => FileType::class,
+            'integer'    => IntegerType::class,
             'language'   => LanguageType::class,
             'locale'     => LocaleType::class,
-            'currency'   => CurrencyType::class,
-            'checkbox'   => CheckboxType::class,
+            'money'      => MoneyType::class,
+            'number'     => NumberType::class,
+            'password'   => PasswordType::class,
+            'percent'    => PercentType::class,
             'radio'      => RadioType::class,
-            'choice'     => ChoiceType::class,
-            'file'       => FileType::class,
-            'collection' => LiveCollectionType::class,
+            'range'      => RangeType::class,
+            'search'     => SearchType::class,
+            'tel'        => TelType::class,
+            'text'       => TextType::class,
+            'textarea'   => TextareaType::class,
+            'time'       => TimeType::class,
+            'timezone'   => TimezoneType::class,
+            'url'        => UrlType::class,
             default      => TextType::class,
         };
     }
