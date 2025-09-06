@@ -61,16 +61,15 @@ Each question has this basic structure:
     "type": "field_type",
     "label": "Field label",
     "required": true,
-    "placeholder": "Placeholder text (optional)",
     "help": "Help text (optional)",
     "attr": {
-        // Additional HTML attributes
+        // Additional HTML attributes (voir plus bas)
     },
     "displayDependencies": [
-        // Conditional display dependencies (optional)
+        // Conditional display dependencies (voir plus bas)
     ],
     "constraints": [
-        // Validation constraints (optional)
+        // Validation constraints (voir plus bas)
     ]
 }
 ```
@@ -86,7 +85,6 @@ Each question has this basic structure:
     "type": "text",
     "label": "Full name",
     "required": true,
-    "placeholder": "Enter your full name"
 }
 ```
 
@@ -97,7 +95,6 @@ Each question has this basic structure:
     "type": "email",
     "label": "Email address",
     "required": true,
-    "placeholder": "example@domain.com"
 }
 ```
 
@@ -118,7 +115,6 @@ Each question has this basic structure:
     "key": "description",
     "type": "textarea",
     "label": "Description",
-    "placeholder": "Describe yourself...",
     "attr": {
         "rows": 4
     }
@@ -130,8 +126,7 @@ Each question has this basic structure:
 {
     "key": "website",
     "type": "url",
-    "label": "Website",
-    "placeholder": "https://example.com"
+    "label": "Website"
 }
 ```
 
@@ -140,8 +135,7 @@ Each question has this basic structure:
 {
     "key": "phone",
     "type": "tel",
-    "label": "Phone number",
-    "placeholder": "+1 234 567 8900"
+    "label": "Phone number"
 }
 ```
 
@@ -246,7 +240,9 @@ Each question has this basic structure:
         "fr": "France",
         "de": "Germany"
     },
-    "placeholder": "Choose your country",
+    "attr": {
+        "placeholder": "Choose your country"
+    },
     "required": true
 }
 ```
@@ -264,8 +260,6 @@ Each question has this basic structure:
         "other": "Other",
         "not_specified": "Prefer not to say"
     },
-    "expanded": true,
-    "multiple": false,
     "required": true
 }
 ```
@@ -286,8 +280,6 @@ Each question has this basic structure:
         "technology": "Technology",
         "art": "Art"
     },
-    "expanded": true,
-    "multiple": true,
     "help": "Select all your interests"
 }
 ```
@@ -297,8 +289,7 @@ Each question has this basic structure:
 {
     "key": "nationality",
     "type": "country",
-    "label": "Nationality",
-    "placeholder": "Select your nationality"
+    "label": "Nationality"
 }
 ```
 
@@ -528,122 +519,774 @@ Here's a complete example of a user registration form:
 
 ```json
 {
-    "slug": "user-registration",
-    "title": "User Registration Form",
-    "description": "Complete your registration to access our platform",
-    "sections": [
-        {
-            "slug": "personal-info",
-            "title": "Personal Information",
-            "categories": [
-                {
-                    "slug": "identity",
-                    "title": "Identity",
-                    "questions": [
-                        {
-                            "key": "first_name",
-                            "type": "text",
-                            "label": "First name",
-                            "required": true,
-                            "placeholder": "Enter your first name"
-                        },
-                        {
-                            "key": "last_name",
-                            "type": "text",
-                            "label": "Last name",
-                            "required": true,
-                            "placeholder": "Enter your last name"
-                        },
-                        {
-                            "key": "email",
-                            "type": "email",
-                            "label": "Email address",
-                            "required": true,
-                            "placeholder": "example@domain.com"
-                        },
-                        {
-                            "key": "birth_date",
-                            "type": "date",
-                            "label": "Birth date",
-                            "required": true,
-                            "widget": "single_text"
-                        }
-                    ]
-                }
-            ]
+    "uniqueKey": "types-de-champs-1.0",
+    "title": "Catalogue des types de champs",
+    "description": "Démonstration complète de tous les types de champs disponibles avec ambelz/json-to-form",
+    "slug": "types-de-champs",
+    "defaultStorage": "local",
+    "displayOptions": {
+        "mode": "singlePage",
+        "showNavigationMenu": true,
+        "navigationPosition": "left",
+        "showSectionTitles": true,
+        "showProgressBar": true,
+        "allowJumpToSection": true,
+        "collapsible": true,
+        "scrollspy": true,
+        "showSummary": true,
+        "sections": {
+            "attr": {
+                "class": "p-2 border-2 border-secondary",
+                "style": "border-style: dashed;"
+            },
+            "label_attr": {
+                "class": "h4"
+            }
         },
-        {
-            "slug": "account-info",
-            "title": "Account Information",
-            "categories": [
-                {
-                    "slug": "credentials",
-                    "title": "Login Credentials",
-                    "questions": [
-                        {
-                            "key": "username",
-                            "type": "text",
-                            "label": "Username",
-                            "required": true,
-                            "constraints": [
-                                {
-                                    "type": "Length",
-                                    "options": {
-                                        "min": 3,
-                                        "max": 20
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "key": "password",
-                            "type": "password",
-                            "label": "Password",
-                            "required": true,
-                            "help": "At least 8 characters with numbers and letters"
-                        }
-                    ]
-                }
-            ]
+        "categories": {
+            "attr": {
+                "class": "px-4 py-3"
+            },
+            "label_attr": {
+                "class": "h5"
+            }
         },
-        {
-            "slug": "preferences",
-            "title": "Preferences",
-            "categories": [
-                {
-                    "slug": "settings",
-                    "title": "Account Settings",
-                    "questions": [
-                        {
-                            "key": "newsletter",
-                            "type": "checkbox",
-                            "label": "Subscribe to newsletter",
-                            "help": "Receive our latest updates and offers"
-                        },
-                        {
-                            "key": "language",
-                            "type": "choice",
-                            "label": "Preferred language",
-                            "choices": {
-                                "en": "English",
-                                "fr": "French",
-                                "es": "Spanish",
-                                "de": "German"
-                            },
-                            "required": true
-                        }
-                    ]
-                }
-            ],
-            "submit": {
-                "label": "Create Account",
-                "class": "btn btn-primary btn-lg w-100 mt-4",
-                "attr": {
-                    "data-confirm": "Create your account with the provided information?"
-                }
+        "questions": {
+            "attr": {
+                "class": "px-4 py-3"
+            },
+            "label_attr": {
+                "class": "h6 my-2 font-weight-bold text-secondary"
             }
         }
-    ]
+    },
+    "sections": [
+        {
+            "slug": "champs-texte",
+            "title": "Champs de texte",
+            "description": "Types de champs pour la saisie de texte",
+            "submit": {
+                "label": "Continuer",
+                "class": "btn btn-primary w-100 mt-4 rounded-pill"
+            },
+            "label_attr": {
+                "class": "h5"
+            },
+            "categories": [
+                {
+                    "slug": "texte-simple",
+                    "title": "Texte simple",
+                    "label_attr": {
+                        "class": "h6"
+                    },
+                    "questions": [
+                        {
+                            "key": "text_field",
+                            "type": "text",
+                            "label": "Champ texte",
+                            "required": true,
+                            "constraints": {
+                                "Length": {
+                                    "min": 2,
+                                    "max": 50,
+                                    "minMessage": "Au moins {{ limit }} caractères requis",
+                                    "maxMessage": "Maximum {{ limit }} caractères autorisés"
+                                }
+                            },
+                            "attr": {
+                                "placeholder": "Saisissez du texte",
+                                "autocomplete": "name"
+                            }
+                        },
+                        {
+                            "key": "email_field",
+                            "type": "email",
+                            "label": "Adresse email",
+                            "required": true,
+                            "constraints": {
+                                "Email": {
+                                    "message": "Veuillez saisir une adresse email valide"
+                                }
+                            },
+                            "attr": {
+                                "placeholder": "exemple@domaine.com",
+                                "autocomplete": "email"
+                            }
+                        },
+                        {
+                            "key": "password_field",
+                            "type": "password",
+                            "label": "Mot de passe",
+                            "required": true,
+                            "constraints": {
+                                "Length": {
+                                    "min": 8,
+                                    "minMessage": "Le mot de passe doit contenir au moins {{ limit }} caractères"
+                                },
+                                "Regex": {
+                                    "pattern": "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)/",
+                                    "message": "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre"
+                                }
+                            },
+                            "attr": {
+                                "placeholder": "Mot de passe sécurisé",
+                                "autocomplete": "new-password"
+                            }
+                        },
+                        {
+                            "key": "url_field",
+                            "type": "url",
+                            "label": "Site web",
+                            "required": false,
+                            "constraints": {
+                                "Url": {
+                                    "message": "Veuillez saisir une URL valide"
+                                }
+                            },
+                            "attr": {
+                                "placeholder": "https://exemple.com"
+                            }
+                        },
+                        {
+                            "key": "tel_field",
+                            "type": "tel",
+                            "label": "Numéro de téléphone",
+                            "required": false,
+                            "constraints": {
+                                "Regex": {
+                                    "pattern": "/^[0-9+\\-\\s\\(\\)]+$/",
+                                    "message": "Format de téléphone invalide"
+                                }
+                            },
+                            "attr": {
+                                "placeholder": "06 12 34 56 78",
+                                "autocomplete": "tel"
+                            }
+                        },
+                        {
+                            "key": "search_field",
+                            "type": "search",
+                            "label": "Rechercher...",
+                            "required": false,
+                            "help": "Ce champ est configuré comme un 'floating label'.",
+                            "help_attr": {
+                                "class": "text-secondary fst-italic"
+                            },
+                            "attr": {
+                                "class": "pt-4",
+                                "placeholder": "Votre message..."
+                            },
+                            "label_attr": {
+                                "class": "h6 font-weight-bold text-secondary"
+                            },
+                            "row_attr": {
+                                "class": "form-floating"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "slug": "texte-long",
+                    "title": "Texte long",
+                    "label_attr": {
+                        "class": "h6"
+                    },
+                    "questions": [
+                        {
+                            "key": "textarea_field",
+                            "type": "textarea",
+                            "label": "Votre message...",
+                            "help": "Ce champ est configuré comme un 'floating label'.",
+                            "help_attr": {
+                                "class": "text-secondary fst-italic"
+                            },
+                            "required": false,
+                            "constraints": {
+                                "Length": {
+                                    "max": 500,
+                                    "maxMessage": "Maximum {{ limit }} caractères"
+                                }
+                            },
+                            "attr": {
+                                "style": "min-height: 10rem;",
+                                "class": "pt-4",
+                                "placeholder": "Votre message..."
+                            },
+                            "label_attr": {
+                                "class": "h6 font-weight-bold text-secondary"
+                            },
+                            "row_attr": {
+                                "class": "form-floating"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "slug": "champs-numeriques",
+            "title": "Champs numériques",
+            "description": "Types de champs pour les valeurs numériques",
+            "submit": {
+                "label": "Continuer",
+                "class": "btn btn-primary w-100 mt-4 rounded-pill"
+            },
+            "label_attr": {
+                "class": "h5"
+            },
+            "categories": [
+                {
+                    "slug": "nombres",
+                    "title": "Nombres",
+                    "label_attr": {
+                        "class": "h6"
+                    },
+                    "questions": [
+                        {
+                            "key": "integer_field",
+                            "type": "integer",
+                            "label": "Nombre entier",
+                            "required": true,
+                            "constraints": {
+                                "Range": {
+                                    "min": 1,
+                                    "max": 100,
+                                    "notInRangeMessage": "La valeur doit être comprise entre {{ min }} et {{ max }}"
+                                }
+                            },
+                            "data": 10
+                        },
+                        {
+                            "key": "number_field",
+                            "type": "number",
+                            "label": "Nombre décimal",
+                            "required": false,
+                            "constraints": {
+                                "Range": {
+                                    "min": 0.1,
+                                    "max": 999.99,
+                                    "notInRangeMessage": "La valeur doit être comprise entre {{ min }} et {{ max }}"
+                                }
+                            },
+                            "attr": {
+                                "step": "0.01"
+                            }
+                        },
+                        {
+                            "key": "range_field",
+                            "type": "range",
+                            "label": "Curseur",
+                            "required": false,
+                            "constraints": {
+                                "Range": {
+                                    "min": 0,
+                                    "max": 100,
+                                    "notInRangeMessage": "La valeur doit être comprise entre {{ min }} et {{ max }}"
+                                }
+                            },
+                            "attr": {
+                                "min": "0",
+                                "max": "100",
+                                "step": "5"
+                            },
+                            "data": 50
+                        }
+                    ]
+                },
+                {
+                    "slug": "monetaire",
+                    "title": "Monétaire",
+                    "label_attr": {
+                        "class": "h6"
+                    },
+                    "questions": [
+                        {
+                            "key": "money_field",
+                            "type": "money",
+                            "label": "Montant",
+                            "required": false,
+                            "currency": "EUR",
+                            "constraints": {
+                                "Range": {
+                                    "min": 0,
+                                    "max": 10000,
+                                    "notInRangeMessage": "Le montant doit être compris entre {{ min }}€ et {{ max }}€"
+                                }
+                            },
+                            "attr": {
+                                "class": "form-control"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "slug": "champs-dates",
+            "title": "Champs de dates et heures",
+            "description": "Types de champs pour les dates et heures",
+            "submit": {
+                "label": "Continuer",
+                "class": "btn btn-primary w-100 mt-4 rounded-pill"
+            },
+            "label_attr": {
+                "class": "h5"
+            },
+            "categories": [
+                {
+                    "slug": "dates-heures",
+                    "title": "Dates et heures",
+                    "label_attr": {
+                        "class": "h6"
+                    },
+                    "questions": [
+                        {
+                            "key": "date_field",
+                            "type": "date",
+                            "label": "Date",
+                            "required": false,
+                            "constraints": {
+                                "GreaterThan": {
+                                    "value": "today",
+                                    "message": "La date doit être dans le futur"
+                                }
+                            }
+                        },
+                        {
+                            "key": "time_field",
+                            "type": "time",
+                            "label": "Heure",
+                            "required": false,
+                            "attr": {
+                                "step": "300"
+                            }
+                        },
+                        {
+                            "key": "datetime_field",
+                            "type": "datetime",
+                            "label": "Date et heure",
+                            "required": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "slug": "champs-choix",
+            "title": "Champs de choix",
+            "description": "Types de champs pour faire des sélections",
+            "submit": {
+                "label": "Continuer",
+                "class": "btn btn-primary w-100 mt-4 rounded-pill"
+            },
+            "label_attr": {
+                "class": "h5"
+            },
+            "categories": [
+                {
+                    "slug": "choix-simple",
+                    "title": "Choix simple",
+                    "label_attr": {
+                        "class": "h6"
+                    },
+                    "questions": [
+                        {
+                            "key": "select_field",
+                            "type": "choice",
+                            "label": "Liste déroulante",
+                            "required": true,
+                            "expanded": false,
+                            "multiple": false,
+                            "choices": {
+                                "Option 1": "option1",
+                                "Option 2": "option2",
+                                "Option 3": "option3",
+                                "Option 4": "option4"
+                            },
+                            "attr": {
+                                "placeholder": "Choisissez une option"
+                            }
+                        },
+                        {
+                            "key": "radio_field",
+                            "type": "choice",
+                            "label": "Boutons radio",
+                            "required": true,
+                            "expanded": true,
+                            "multiple": false,
+                            "choices": {
+                                "Choix A": "choix_a",
+                                "Choix B": "choix_b",
+                                "Choix C": "choix_c"
+                            },
+                            "data": "choix_a"
+                        }
+                    ]
+                },
+                {
+                    "slug": "choix-multiple",
+                    "title": "Choix multiple",
+                    "label_attr": {
+                        "class": "h6"
+                    },
+                    "questions": [
+                        {
+                            "key": "multiselect_field",
+                            "type": "choice",
+                            "label": "Sélection multiple",
+                            "required": false,
+                            "expanded": false,
+                            "multiple": true,
+                            "choices": {
+                                "Élément 1": "element1",
+                                "Élément 2": "element2",
+                                "Élément 3": "element3",
+                                "Élément 4": "element4",
+                                "Élément 5": "element5"
+                            },
+                            "attr": {
+                                "size": "4"
+                            }
+                        },
+                        {
+                            "key": "checkbox_multiple_field",
+                            "type": "choice",
+                            "label": "Cases à cocher multiples",
+                            "required": false,
+                            "expanded": true,
+                            "multiple": true,
+                            "choices": {
+                                "Intérêt 1": "interet1",
+                                "Intérêt 2": "interet2",
+                                "Intérêt 3": "interet3",
+                                "Intérêt 4": "interet4"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "slug": "choix-speciaux",
+                    "title": "Choix spéciaux",
+                    "label_attr": {
+                        "class": "h6"
+                    },
+                    "questions": [
+                        {
+                            "key": "country_field",
+                            "type": "country",
+                            "label": "Pays",
+                            "required": false,
+                            "data": "FR",
+                            "attr": {
+                                "class": "form-select"
+                            }
+                        },
+                        {
+                            "key": "language_field",
+                            "type": "language",
+                            "label": "Langue",
+                            "required": false,
+                            "data": "fr",
+                            "attr": {
+                                "class": "form-select"
+                            }
+                        },
+                        {
+                            "key": "locale_field",
+                            "type": "locale",
+                            "label": "Locale",
+                            "required": false,
+                            "data": "fr_FR",
+                            "attr": {
+                                "class": "form-select"
+                            }
+                        },
+                        {
+                            "key": "timezone_field",
+                            "type": "timezone",
+                            "label": "Fuseau horaire",
+                            "help": "Sélectionnez votre fuseau horaire pour afficher les heures correctement",
+                            "required": false,
+                            "data": "Europe/Paris",
+                            "preferred_choices": [
+                                "Europe/Paris",
+                                "Europe/London",
+                                "Europe/Berlin",
+                                "America/New_York",
+                                "America/Los_Angeles",
+                                "Asia/Tokyo",
+                                "Australia/Sydney"
+                            ],
+                            "attr": {
+                                "class": "form-select"
+                            }
+                        },
+                        {
+                            "key": "currency_field",
+                            "type": "currency",
+                            "label": "Devise",
+                            "required": false,
+                            "data": "EUR",
+                            "attr": {
+                                "class": "form-select"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "slug": "champs-booleen",
+            "title": "Champs booléens",
+            "description": "Types de champs pour les valeurs vraies/fausses",
+            "submit": {
+                "label": "Continuer",
+                "class": "btn btn-primary w-100 mt-4 rounded-pill"
+            },
+            "label_attr": {
+                "class": "h5"
+            },
+            "categories": [
+                {
+                    "slug": "booleens",
+                    "title": "Cases à cocher",
+                    "label_attr": {
+                        "class": "h6"
+                    },
+                    "questions": [
+                        {
+                            "key": "checkbox_field",
+                            "type": "checkbox",
+                            "label": "Case à cocher simple",
+                            "required": false,
+                            "data": false
+                        },
+                        {
+                            "key": "checkbox_required_field",
+                            "type": "checkbox",
+                            "label": "J'accepte les conditions d'utilisation",
+                            "required": true,
+                            "constraints": {
+                                "EqualTo": {
+                                    "value": true,
+                                    "message": "Vous devez accepter les conditions"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "slug": "champs-fichiers",
+            "title": "Champs de fichiers",
+            "description": "Types de champs pour l'upload de fichiers",
+            "submit": {
+                "label": "Continuer",
+                "class": "btn btn-primary w-100 mt-4 rounded-pill"
+            },
+            "label_attr": {
+                "class": "h5"
+            },
+            "categories": [
+                {
+                    "slug": "fichiers",
+                    "title": "Upload de fichiers",
+                    "label_attr": {
+                        "class": "h6"
+                    },
+                    "questions": [
+                        {
+                            "key": "file_field",
+                            "type": "file",
+                            "label": "Fichier unique",
+                            "required": false,
+                            "constraints": {
+                                "File": {
+                                    "maxSize": "2M",
+                                    "mimeTypes": ["image/jpeg", "image/png", "application/pdf"],
+                                    "mimeTypesMessage": "Veuillez sélectionner un fichier JPEG, PNG ou PDF"
+                                }
+                            },
+                            "attr": {
+                                "accept": ".jpg,.jpeg,.png,.pdf"
+                            }
+                        },
+                        {
+                            "key": "image_field",
+                            "type": "file",
+                            "label": "Image",
+                            "required": false,
+                            "constraints": {
+                                "Image": {
+                                    "maxSize": "5M",
+                                    "maxWidth": 2000,
+                                    "maxHeight": 2000,
+                                    "maxSizeMessage": "L'image ne doit pas dépasser {{ limit }}",
+                                    "maxWidthMessage": "L'image ne doit pas dépasser {{ max_width }}px de largeur",
+                                    "maxHeightMessage": "L'image ne doit pas dépasser {{ max_height }}px de hauteur"
+                                }
+                            },
+                            "attr": {
+                                "accept": "image/*"
+                            }
+                        },
+                        {
+                            "key": "multiple_files_field",
+                            "type": "file",
+                            "label": "Fichiers multiples",
+                            "required": false,
+                            "multiple": true,
+                            "constraints": {
+                                "Count": {
+                                    "max": 5,
+                                    "maxMessage": "Vous ne pouvez pas télécharger plus de {{ limit }} fichiers"
+                                }
+                            },
+                            "attr": {
+                                "accept": "image/jpeg,image/png",
+                                "multiple": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "slug": "champs-caches",
+            "title": "Champs cachés et spéciaux",
+            "description": "Types de champs spéciaux et cachés",
+            "submit": {
+                "label": "Continuer",
+                "class": "btn btn-primary w-100 mt-4 rounded-pill"
+            },
+            "label_attr": {
+                "class": "h5"
+            },
+            "categories": [
+                {
+                    "slug": "speciaux",
+                    "title": "Champs spéciaux",
+                    "label_attr": {
+                        "class": "h6"
+                    },
+                    "questions": [
+                        {
+                            "key": "hidden_field",
+                            "type": "hidden",
+                            "data": "valeur_cachee"
+                        },
+                        {
+                            "key": "color_field",
+                            "type": "color",
+                            "label": "Couleur",
+                            "required": false,
+                            "data": "#3498db"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "slug": "collections",
+            "title": "Collections et formulaires imbriqués",
+            "description": "Formulaires dynamiques avec collections",
+            "submit": {
+                "label": "Finaliser",
+                "class": "btn btn-success w-100 mt-4 rounded-pill"
+            },
+            "label_attr": {
+                "class": "h5"
+            },
+            "categories": [
+                {
+                    "slug": "collection-complexe",
+                    "title": "Collection complexe",
+                    "label_attr": {
+                        "class": "h6"
+                    },
+                    "questions": [
+                        {
+                            "key": "contacts_collection",
+                            "type": "collection",
+                            "label": "Contacts",
+                            "required": false,
+                            "allow_add": true,
+                            "allow_delete": true,
+                            "prototype": true,
+                            "button_add_options": {
+                                "label": "Ajouter un contact",
+                                "attr": {
+                                    "class": "btn btn-success btn-sm mb-2"
+                                }
+                            },
+                            "button_delete_options": {
+                                "label": "Supprimer",
+                                "attr": {
+                                    "class": "btn btn-outline-danger btn-sm"
+                                }
+                            },
+                            "fields": [
+                                {
+                                    "key": "nom",
+                                    "type": "text",
+                                    "label": "Nom",
+                                    "required": true,
+                                    "constraints": {
+                                        "Length": {
+                                            "min": 2,
+                                            "max": 50,
+                                            "minMessage": "Le nom doit contenir au moins {{ limit }} caractères",
+                                            "maxMessage": "Le nom ne peut pas dépasser {{ limit }} caractères"
+                                        }
+                                    },
+                                    "attr": {
+                                        "class": "form-control"
+                                    }
+                                },
+                                {
+                                    "key": "email",
+                                    "type": "email",
+                                    "label": "Email",
+                                    "required": true,
+                                    "constraints": {
+                                        "Email": {
+                                            "message": "Adresse email invalide"
+                                        }
+                                    },
+                                    "attr": {
+                                        "class": "form-control"
+                                    }
+                                },
+                                {
+                                    "key": "telephone",
+                                    "type": "tel",
+                                    "label": "Téléphone",
+                                    "required": false,
+                                    "constraints": {
+                                        "Regex": {
+                                            "pattern": "/^[0-9+\\-\\s\\(\\)]+$/",
+                                            "message": "Format de téléphone invalide"
+                                        }
+                                    },
+                                    "attr": {
+                                        "class": "form-control"
+                                    }
+                                }
+                            ],
+                            "attr": {
+                                "class": "collection-contacts border rounded p-3 mb-3"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "submit": {
+        "label": "Envoyer le formulaire complet",
+        "class": "btn btn-success btn-lg w-100"
+    }
 }
 ```
 
