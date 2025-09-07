@@ -234,11 +234,11 @@ Each question has this basic structure:
     "type": "choice",
     "label": "Country of residence",
     "choices": {
-        "us": "United States",
-        "ca": "Canada",
-        "uk": "United Kingdom",
-        "fr": "France",
-        "de": "Germany"
+        "United States": "us",
+        "Canada": "ca",
+        "United Kingdom": "uk",
+        "France": "fr",
+        "Germany": "de"
     },
     "attr": {
         "placeholder": "Choose your country"
@@ -254,11 +254,11 @@ Each question has this basic structure:
     "type": "choice",
     "label": "Gender",
     "choices": {
-        "m": "Male",
-        "f": "Female",
-        "nb": "Non-binary",
-        "other": "Other",
-        "not_specified": "Prefer not to say"
+        "Male": "m",
+        "Female": "f",
+        "Non-binary": "nb",
+        "Other": "other",
+        "Prefer not to say": "not_specified"
     },
     "required": true
 }
@@ -271,14 +271,14 @@ Each question has this basic structure:
     "type": "choice",
     "label": "Interests",
     "choices": {
-        "sport": "Sports",
-        "music": "Music",
-        "reading": "Reading",
-        "movies": "Movies",
-        "travel": "Travel",
-        "cooking": "Cooking",
-        "technology": "Technology",
-        "art": "Art"
+        "Sports": "sport",
+        "Music": "music",
+        "Reading": "reading",
+        "Movies": "movies",
+        "Travel": "travel",
+        "Cooking": "cooking",
+        "Technology": "technology",
+        "Art": "art"
     },
     "help": "Select all your interests"
 }
@@ -480,6 +480,121 @@ The value associated with these keys is the value to compare the `field`'s data 
 ```
 This field "special_offer" will be shown if the user `is_subscribed` OR if their `account_age_days` is NOT less than 30 (i.e., 30 or more).
 
+## 🎨 Options d'affichage (displayOptions)
+
+La propriété `displayOptions` au niveau racine du formulaire permet de personnaliser l'affichage et le comportement du formulaire.
+
+### Mode d'affichage
+
+#### singlePage
+Toutes les sections sont affichées les unes sous les autres sur une seule page :
+
+```json
+{
+    "displayOptions": {
+        "mode": "singlePage"
+    }
+}
+```
+
+#### stepper
+Les sections sont affichées sous forme d'onglets type wizard pour naviguer d'une section à une autre :
+
+```json
+{
+    "displayOptions": {
+        "mode": "stepper"
+    }
+}
+```
+
+### Stylisation des éléments
+
+Vous pouvez personnaliser l'apparence des sections, catégories et questions en utilisant les propriétés `attr.class` et `label_attr.class` :
+
+#### Sections
+```json
+{
+    "displayOptions": {
+        "sections": {
+            "attr": {
+                "class": "p-4 border rounded shadow-sm"
+            },
+            "label_attr": {
+                "class": "h3 text-primary mb-3"
+            }
+        }
+    }
+}
+```
+
+#### Catégories
+```json
+{
+    "displayOptions": {
+        "categories": {
+            "attr": {
+                "class": "px-3 py-2 bg-light rounded"
+            },
+            "label_attr": {
+                "class": "h4 text-secondary"
+            }
+        }
+    }
+}
+```
+
+#### Questions
+```json
+{
+    "displayOptions": {
+        "questions": {
+            "attr": {
+                "class": "mb-3 form-group"
+            },
+            "label_attr": {
+                "class": "form-label fw-bold"
+            }
+        }
+    }
+}
+```
+
+### Exemple complet de displayOptions
+
+```json
+{
+    "displayOptions": {
+        "mode": "singlePage",
+        "sections": {
+            "attr": {
+                "class": "p-4 border-2 border-primary rounded-3 mb-4",
+                "style": "background-color: #f8f9fa;"
+            },
+            "label_attr": {
+                "class": "h2 text-primary border-bottom pb-2 mb-3"
+            }
+        },
+        "categories": {
+            "attr": {
+                "class": "px-3 py-2 bg-white rounded shadow-sm mb-3"
+            },
+            "label_attr": {
+                "class": "h4 text-dark mb-2"
+            }
+        },
+        "questions": {
+            "attr": {
+                "class": "mb-4"
+            },
+            "label_attr": {
+                "class": "form-label fw-bold text-secondary"
+            }
+        }
+    }
+}
+```
+
 ## ✅ Validation Constraints
 
 ### Required Field
@@ -512,6 +627,8 @@ The bundle supports all Symfony validation constraints from https://symfony.com/
     }
 }
 ```
+
+
 
 ## 📝 Complete Example
 
