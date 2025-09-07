@@ -480,14 +480,14 @@ The value associated with these keys is the value to compare the `field`'s data 
 ```
 This field "special_offer" will be shown if the user `is_subscribed` OR if their `account_age_days` is NOT less than 30 (i.e., 30 or more).
 
-## 🎨 Options d'affichage (displayOptions)
+## 🎨 Display Options (displayOptions)
 
-La propriété `displayOptions` au niveau racine du formulaire permet de personnaliser l'affichage et le comportement du formulaire.
+The `displayOptions` property at the root level of the form allows you to customize the display and behavior of the form.
 
-### Mode d'affichage
+### Display Mode
 
 #### singlePage
-Toutes les sections sont affichées les unes sous les autres sur une seule page :
+All sections are displayed one below the other on a single page:
 
 ```json
 {
@@ -498,7 +498,7 @@ Toutes les sections sont affichées les unes sous les autres sur une seule page 
 ```
 
 #### stepper
-Les sections sont affichées sous forme d'onglets type wizard pour naviguer d'une section à une autre :
+Sections are displayed as wizard-style tabs to navigate from one section to another:
 
 ```json
 {
@@ -508,9 +508,9 @@ Les sections sont affichées sous forme d'onglets type wizard pour naviguer d'un
 }
 ```
 
-### Stylisation des éléments
+### Element Styling
 
-Vous pouvez personnaliser l'apparence des sections, catégories et questions en utilisant les propriétés `attr.class` et `label_attr.class` :
+You can customize the appearance of sections, categories, and questions using the `attr.class` and `label_attr.class` properties:
 
 #### Sections
 ```json
@@ -528,7 +528,7 @@ Vous pouvez personnaliser l'apparence des sections, catégories et questions en 
 }
 ```
 
-#### Catégories
+#### Categories
 ```json
 {
     "displayOptions": {
@@ -560,7 +560,7 @@ Vous pouvez personnaliser l'apparence des sections, catégories et questions en 
 }
 ```
 
-### Exemple complet de displayOptions
+### Complete displayOptions Example
 
 ```json
 {
@@ -636,10 +636,10 @@ Here's a complete example of a user registration form:
 
 ```json
 {
-    "uniqueKey": "types-de-champs-1.0",
-    "title": "Catalogue des types de champs",
-    "description": "Démonstration complète de tous les types de champs disponibles avec ambelz/json-to-form",
-    "slug": "types-de-champs",
+    "uniqueKey": "field-types-1.0",
+    "title": "Field Types Catalog",
+    "description": "Complete demonstration of all available field types with ambelz/json-to-form",
+    "slug": "field-types",
     "defaultStorage": "local",
     "displayOptions": {
         "mode": "singlePage",
@@ -679,11 +679,11 @@ Here's a complete example of a user registration form:
     },
     "sections": [
         {
-            "slug": "champs-texte",
-            "title": "Champs de texte",
-            "description": "Types de champs pour la saisie de texte",
+            "slug": "text-fields",
+            "title": "Text Fields",
+            "description": "Field types for text input",
             "submit": {
-                "label": "Continuer",
+                "label": "Continue",
                 "class": "btn btn-primary w-100 mt-4 rounded-pill"
             },
             "label_attr": {
@@ -691,8 +691,8 @@ Here's a complete example of a user registration form:
             },
             "categories": [
                 {
-                    "slug": "texte-simple",
-                    "title": "Texte simple",
+                    "slug": "simple-text",
+                    "title": "Simple Text",
                     "label_attr": {
                         "class": "h6"
                     },
@@ -700,98 +700,98 @@ Here's a complete example of a user registration form:
                         {
                             "key": "text_field",
                             "type": "text",
-                            "label": "Champ texte",
+                            "label": "Text Field",
                             "required": true,
                             "constraints": {
                                 "Length": {
                                     "min": 2,
                                     "max": 50,
-                                    "minMessage": "Au moins {{ limit }} caractères requis",
-                                    "maxMessage": "Maximum {{ limit }} caractères autorisés"
+                                    "minMessage": "At least {{ limit }} characters required",
+                                    "maxMessage": "Maximum {{ limit }} characters allowed"
                                 }
                             },
                             "attr": {
-                                "placeholder": "Saisissez du texte",
+                                "placeholder": "Enter text",
                                 "autocomplete": "name"
                             }
                         },
                         {
                             "key": "email_field",
                             "type": "email",
-                            "label": "Adresse email",
+                            "label": "Email Address",
                             "required": true,
                             "constraints": {
                                 "Email": {
-                                    "message": "Veuillez saisir une adresse email valide"
+                                    "message": "Please enter a valid email address"
                                 }
                             },
                             "attr": {
-                                "placeholder": "exemple@domaine.com",
+                                "placeholder": "example@domain.com",
                                 "autocomplete": "email"
                             }
                         },
                         {
                             "key": "password_field",
                             "type": "password",
-                            "label": "Mot de passe",
+                            "label": "Password",
                             "required": true,
                             "constraints": {
                                 "Length": {
                                     "min": 8,
-                                    "minMessage": "Le mot de passe doit contenir au moins {{ limit }} caractères"
+                                    "minMessage": "Password must contain at least {{ limit }} characters"
                                 },
                                 "Regex": {
                                     "pattern": "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)/",
-                                    "message": "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre"
+                                    "message": "Password must contain at least one lowercase, one uppercase and one digit"
                                 }
                             },
                             "attr": {
-                                "placeholder": "Mot de passe sécurisé",
+                                "placeholder": "Secure password",
                                 "autocomplete": "new-password"
                             }
                         },
                         {
                             "key": "url_field",
                             "type": "url",
-                            "label": "Site web",
+                            "label": "Website",
                             "required": false,
                             "constraints": {
                                 "Url": {
-                                    "message": "Veuillez saisir une URL valide"
+                                    "message": "Please enter a valid URL"
                                 }
                             },
                             "attr": {
-                                "placeholder": "https://exemple.com"
+                                "placeholder": "https://example.com"
                             }
                         },
                         {
                             "key": "tel_field",
                             "type": "tel",
-                            "label": "Numéro de téléphone",
+                            "label": "Phone Number",
                             "required": false,
                             "constraints": {
                                 "Regex": {
                                     "pattern": "/^[0-9+\\-\\s\\(\\)]+$/",
-                                    "message": "Format de téléphone invalide"
+                                    "message": "Invalid phone format"
                                 }
                             },
                             "attr": {
-                                "placeholder": "06 12 34 56 78",
+                                "placeholder": "+1 234 567 8900",
                                 "autocomplete": "tel"
                             }
                         },
                         {
                             "key": "search_field",
                             "type": "search",
-                            "label": "Rechercher...",
+                            "label": "Search...",
                             "required": false,
-                            "help": "Ce champ est configuré comme un 'floating label'.",
+                            "help": "This field is configured as a 'floating label'.",
                             "help_attr": {
                                 "class": "text-secondary fst-italic"
                             },
                             "attr": {
                                 "class": "pt-4",
-                                "placeholder": "Votre message..."
+                                "placeholder": "Your message..."
                             },
                             "label_attr": {
                                 "class": "h6 font-weight-bold text-secondary"
@@ -803,8 +803,8 @@ Here's a complete example of a user registration form:
                     ]
                 },
                 {
-                    "slug": "texte-long",
-                    "title": "Texte long",
+                    "slug": "long-text",
+                    "title": "Long Text",
                     "label_attr": {
                         "class": "h6"
                     },
@@ -812,8 +812,8 @@ Here's a complete example of a user registration form:
                         {
                             "key": "textarea_field",
                             "type": "textarea",
-                            "label": "Votre message...",
-                            "help": "Ce champ est configuré comme un 'floating label'.",
+                            "label": "Your message...",
+                            "help": "This field is configured as a 'floating label'.",
                             "help_attr": {
                                 "class": "text-secondary fst-italic"
                             },
@@ -821,13 +821,13 @@ Here's a complete example of a user registration form:
                             "constraints": {
                                 "Length": {
                                     "max": 500,
-                                    "maxMessage": "Maximum {{ limit }} caractères"
+                                    "maxMessage": "Maximum {{ limit }} characters"
                                 }
                             },
                             "attr": {
                                 "style": "min-height: 10rem;",
                                 "class": "pt-4",
-                                "placeholder": "Votre message..."
+                                "placeholder": "Your message..."
                             },
                             "label_attr": {
                                 "class": "h6 font-weight-bold text-secondary"
@@ -841,11 +841,11 @@ Here's a complete example of a user registration form:
             ]
         },
         {
-            "slug": "champs-numeriques",
-            "title": "Champs numériques",
-            "description": "Types de champs pour les valeurs numériques",
+            "slug": "numeric-fields",
+            "title": "Numeric Fields",
+            "description": "Field types for numeric values",
             "submit": {
-                "label": "Continuer",
+                "label": "Continue",
                 "class": "btn btn-primary w-100 mt-4 rounded-pill"
             },
             "label_attr": {
@@ -853,8 +853,8 @@ Here's a complete example of a user registration form:
             },
             "categories": [
                 {
-                    "slug": "nombres",
-                    "title": "Nombres",
+                    "slug": "numbers",
+                    "title": "Numbers",
                     "label_attr": {
                         "class": "h6"
                     },
@@ -862,13 +862,13 @@ Here's a complete example of a user registration form:
                         {
                             "key": "integer_field",
                             "type": "integer",
-                            "label": "Nombre entier",
+                            "label": "Integer Number",
                             "required": true,
                             "constraints": {
                                 "Range": {
                                     "min": 1,
                                     "max": 100,
-                                    "notInRangeMessage": "La valeur doit être comprise entre {{ min }} et {{ max }}"
+                                    "notInRangeMessage": "Value must be between {{ min }} and {{ max }}"
                                 }
                             },
                             "data": 10
@@ -876,13 +876,13 @@ Here's a complete example of a user registration form:
                         {
                             "key": "number_field",
                             "type": "number",
-                            "label": "Nombre décimal",
+                            "label": "Decimal Number",
                             "required": false,
                             "constraints": {
                                 "Range": {
                                     "min": 0.1,
                                     "max": 999.99,
-                                    "notInRangeMessage": "La valeur doit être comprise entre {{ min }} et {{ max }}"
+                                    "notInRangeMessage": "Value must be between {{ min }} and {{ max }}"
                                 }
                             },
                             "attr": {
@@ -892,13 +892,13 @@ Here's a complete example of a user registration form:
                         {
                             "key": "range_field",
                             "type": "range",
-                            "label": "Curseur",
+                            "label": "Slider",
                             "required": false,
                             "constraints": {
                                 "Range": {
                                     "min": 0,
                                     "max": 100,
-                                    "notInRangeMessage": "La valeur doit être comprise entre {{ min }} et {{ max }}"
+                                    "notInRangeMessage": "Value must be between {{ min }} and {{ max }}"
                                 }
                             },
                             "attr": {
@@ -911,8 +911,8 @@ Here's a complete example of a user registration form:
                     ]
                 },
                 {
-                    "slug": "monetaire",
-                    "title": "Monétaire",
+                    "slug": "monetary",
+                    "title": "Monetary",
                     "label_attr": {
                         "class": "h6"
                     },
@@ -920,14 +920,14 @@ Here's a complete example of a user registration form:
                         {
                             "key": "money_field",
                             "type": "money",
-                            "label": "Montant",
+                            "label": "Amount",
                             "required": false,
                             "currency": "EUR",
                             "constraints": {
                                 "Range": {
                                     "min": 0,
                                     "max": 10000,
-                                    "notInRangeMessage": "Le montant doit être compris entre {{ min }}€ et {{ max }}€"
+                                    "notInRangeMessage": "Amount must be between {{ min }}€ and {{ max }}€"
                                 }
                             },
                             "attr": {
@@ -939,11 +939,11 @@ Here's a complete example of a user registration form:
             ]
         },
         {
-            "slug": "champs-dates",
-            "title": "Champs de dates et heures",
-            "description": "Types de champs pour les dates et heures",
+            "slug": "date-time-fields",
+            "title": "Date and Time Fields",
+            "description": "Field types for dates and times",
             "submit": {
-                "label": "Continuer",
+                "label": "Continue",
                 "class": "btn btn-primary w-100 mt-4 rounded-pill"
             },
             "label_attr": {
@@ -951,8 +951,8 @@ Here's a complete example of a user registration form:
             },
             "categories": [
                 {
-                    "slug": "dates-heures",
-                    "title": "Dates et heures",
+                    "slug": "dates-times",
+                    "title": "Dates and Times",
                     "label_attr": {
                         "class": "h6"
                     },
@@ -965,14 +965,14 @@ Here's a complete example of a user registration form:
                             "constraints": {
                                 "GreaterThan": {
                                     "value": "today",
-                                    "message": "La date doit être dans le futur"
+                                    "message": "Date must be in the future"
                                 }
                             }
                         },
                         {
                             "key": "time_field",
                             "type": "time",
-                            "label": "Heure",
+                            "label": "Time",
                             "required": false,
                             "attr": {
                                 "step": "300"
@@ -981,7 +981,7 @@ Here's a complete example of a user registration form:
                         {
                             "key": "datetime_field",
                             "type": "datetime",
-                            "label": "Date et heure",
+                            "label": "Date and Time",
                             "required": false
                         }
                     ]
@@ -989,11 +989,11 @@ Here's a complete example of a user registration form:
             ]
         },
         {
-            "slug": "champs-choix",
-            "title": "Champs de choix",
-            "description": "Types de champs pour faire des sélections",
+            "slug": "choice-fields",
+            "title": "Choice Fields",
+            "description": "Field types for making selections",
             "submit": {
-                "label": "Continuer",
+                "label": "Continue",
                 "class": "btn btn-primary w-100 mt-4 rounded-pill"
             },
             "label_attr": {
@@ -1001,8 +1001,8 @@ Here's a complete example of a user registration form:
             },
             "categories": [
                 {
-                    "slug": "choix-simple",
-                    "title": "Choix simple",
+                    "slug": "simple-choice",
+                    "title": "Simple Choice",
                     "label_attr": {
                         "class": "h6"
                     },
@@ -1010,7 +1010,7 @@ Here's a complete example of a user registration form:
                         {
                             "key": "select_field",
                             "type": "choice",
-                            "label": "Liste déroulante",
+                            "label": "Dropdown List",
                             "required": true,
                             "expanded": false,
                             "multiple": false,
@@ -1021,28 +1021,28 @@ Here's a complete example of a user registration form:
                                 "Option 4": "option4"
                             },
                             "attr": {
-                                "placeholder": "Choisissez une option"
+                                "placeholder": "Choose an option"
                             }
                         },
                         {
                             "key": "radio_field",
                             "type": "choice",
-                            "label": "Boutons radio",
+                            "label": "Radio Buttons",
                             "required": true,
                             "expanded": true,
                             "multiple": false,
                             "choices": {
-                                "Choix A": "choix_a",
-                                "Choix B": "choix_b",
-                                "Choix C": "choix_c"
+                                "Choice A": "choice_a",
+                                "Choice B": "choice_b",
+                                "Choice C": "choice_c"
                             },
-                            "data": "choix_a"
+                            "data": "choice_a"
                         }
                     ]
                 },
                 {
-                    "slug": "choix-multiple",
-                    "title": "Choix multiple",
+                    "slug": "multiple-choice",
+                    "title": "Multiple Choice",
                     "label_attr": {
                         "class": "h6"
                     },
@@ -1050,16 +1050,16 @@ Here's a complete example of a user registration form:
                         {
                             "key": "multiselect_field",
                             "type": "choice",
-                            "label": "Sélection multiple",
+                            "label": "Multiple Selection",
                             "required": false,
                             "expanded": false,
                             "multiple": true,
                             "choices": {
-                                "Élément 1": "element1",
-                                "Élément 2": "element2",
-                                "Élément 3": "element3",
-                                "Élément 4": "element4",
-                                "Élément 5": "element5"
+                                "Element 1": "element1",
+                                "Element 2": "element2",
+                                "Element 3": "element3",
+                                "Element 4": "element4",
+                                "Element 5": "element5"
                             },
                             "attr": {
                                 "size": "4"
@@ -1068,22 +1068,22 @@ Here's a complete example of a user registration form:
                         {
                             "key": "checkbox_multiple_field",
                             "type": "choice",
-                            "label": "Cases à cocher multiples",
+                            "label": "Multiple Checkboxes",
                             "required": false,
                             "expanded": true,
                             "multiple": true,
                             "choices": {
-                                "Intérêt 1": "interet1",
-                                "Intérêt 2": "interet2",
-                                "Intérêt 3": "interet3",
-                                "Intérêt 4": "interet4"
+                                "Interest 1": "interest1",
+                                "Interest 2": "interest2",
+                                "Interest 3": "interest3",
+                                "Interest 4": "interest4"
                             }
                         }
                     ]
                 },
                 {
-                    "slug": "choix-speciaux",
-                    "title": "Choix spéciaux",
+                    "slug": "special-choices",
+                    "title": "Special Choices",
                     "label_attr": {
                         "class": "h6"
                     },
@@ -1091,7 +1091,7 @@ Here's a complete example of a user registration form:
                         {
                             "key": "country_field",
                             "type": "country",
-                            "label": "Pays",
+                            "label": "Country",
                             "required": false,
                             "data": "FR",
                             "attr": {
@@ -1101,7 +1101,7 @@ Here's a complete example of a user registration form:
                         {
                             "key": "language_field",
                             "type": "language",
-                            "label": "Langue",
+                            "label": "Language",
                             "required": false,
                             "data": "fr",
                             "attr": {
@@ -1121,8 +1121,8 @@ Here's a complete example of a user registration form:
                         {
                             "key": "timezone_field",
                             "type": "timezone",
-                            "label": "Fuseau horaire",
-                            "help": "Sélectionnez votre fuseau horaire pour afficher les heures correctement",
+                            "label": "Timezone",
+                            "help": "Select your timezone to display times correctly",
                             "required": false,
                             "data": "Europe/Paris",
                             "preferred_choices": [
@@ -1141,7 +1141,7 @@ Here's a complete example of a user registration form:
                         {
                             "key": "currency_field",
                             "type": "currency",
-                            "label": "Devise",
+                            "label": "Currency",
                             "required": false,
                             "data": "EUR",
                             "attr": {
@@ -1153,11 +1153,11 @@ Here's a complete example of a user registration form:
             ]
         },
         {
-            "slug": "champs-booleen",
-            "title": "Champs booléens",
-            "description": "Types de champs pour les valeurs vraies/fausses",
+            "slug": "boolean-fields",
+            "title": "Boolean Fields",
+            "description": "Field types for true/false values",
             "submit": {
-                "label": "Continuer",
+                "label": "Continue",
                 "class": "btn btn-primary w-100 mt-4 rounded-pill"
             },
             "label_attr": {
@@ -1165,8 +1165,8 @@ Here's a complete example of a user registration form:
             },
             "categories": [
                 {
-                    "slug": "booleens",
-                    "title": "Cases à cocher",
+                    "slug": "booleans",
+                    "title": "Checkboxes",
                     "label_attr": {
                         "class": "h6"
                     },
@@ -1174,19 +1174,19 @@ Here's a complete example of a user registration form:
                         {
                             "key": "checkbox_field",
                             "type": "checkbox",
-                            "label": "Case à cocher simple",
+                            "label": "Simple Checkbox",
                             "required": false,
                             "data": false
                         },
                         {
                             "key": "checkbox_required_field",
                             "type": "checkbox",
-                            "label": "J'accepte les conditions d'utilisation",
+                            "label": "I accept the terms of use",
                             "required": true,
                             "constraints": {
                                 "EqualTo": {
                                     "value": true,
-                                    "message": "Vous devez accepter les conditions"
+                                    "message": "You must accept the conditions"
                                 }
                             }
                         }
@@ -1195,11 +1195,11 @@ Here's a complete example of a user registration form:
             ]
         },
         {
-            "slug": "champs-fichiers",
-            "title": "Champs de fichiers",
-            "description": "Types de champs pour l'upload de fichiers",
+            "slug": "file-fields",
+            "title": "File Fields",
+            "description": "Field types for file upload",
             "submit": {
-                "label": "Continuer",
+                "label": "Continue",
                 "class": "btn btn-primary w-100 mt-4 rounded-pill"
             },
             "label_attr": {
@@ -1207,8 +1207,8 @@ Here's a complete example of a user registration form:
             },
             "categories": [
                 {
-                    "slug": "fichiers",
-                    "title": "Upload de fichiers",
+                    "slug": "files",
+                    "title": "File Upload",
                     "label_attr": {
                         "class": "h6"
                     },
@@ -1216,13 +1216,13 @@ Here's a complete example of a user registration form:
                         {
                             "key": "file_field",
                             "type": "file",
-                            "label": "Fichier unique",
+                            "label": "Single File",
                             "required": false,
                             "constraints": {
                                 "File": {
                                     "maxSize": "2M",
                                     "mimeTypes": ["image/jpeg", "image/png", "application/pdf"],
-                                    "mimeTypesMessage": "Veuillez sélectionner un fichier JPEG, PNG ou PDF"
+                                    "mimeTypesMessage": "Please select a JPEG, PNG or PDF file"
                                 }
                             },
                             "attr": {
@@ -1239,9 +1239,9 @@ Here's a complete example of a user registration form:
                                     "maxSize": "5M",
                                     "maxWidth": 2000,
                                     "maxHeight": 2000,
-                                    "maxSizeMessage": "L'image ne doit pas dépasser {{ limit }}",
-                                    "maxWidthMessage": "L'image ne doit pas dépasser {{ max_width }}px de largeur",
-                                    "maxHeightMessage": "L'image ne doit pas dépasser {{ max_height }}px de hauteur"
+                                    "maxSizeMessage": "Image must not exceed {{ limit }}",
+                                    "maxWidthMessage": "Image must not exceed {{ max_width }}px in width",
+                                    "maxHeightMessage": "Image must not exceed {{ max_height }}px in height"
                                 }
                             },
                             "attr": {
@@ -1251,13 +1251,13 @@ Here's a complete example of a user registration form:
                         {
                             "key": "multiple_files_field",
                             "type": "file",
-                            "label": "Fichiers multiples",
+                            "label": "Multiple Files",
                             "required": false,
                             "multiple": true,
                             "constraints": {
                                 "Count": {
                                     "max": 5,
-                                    "maxMessage": "Vous ne pouvez pas télécharger plus de {{ limit }} fichiers"
+                                    "maxMessage": "You cannot upload more than {{ limit }} files"
                                 }
                             },
                             "attr": {
@@ -1270,11 +1270,11 @@ Here's a complete example of a user registration form:
             ]
         },
         {
-            "slug": "champs-caches",
-            "title": "Champs cachés et spéciaux",
-            "description": "Types de champs spéciaux et cachés",
+            "slug": "hidden-fields",
+            "title": "Hidden and Special Fields",
+            "description": "Special and hidden field types",
             "submit": {
-                "label": "Continuer",
+                "label": "Continue",
                 "class": "btn btn-primary w-100 mt-4 rounded-pill"
             },
             "label_attr": {
@@ -1282,8 +1282,8 @@ Here's a complete example of a user registration form:
             },
             "categories": [
                 {
-                    "slug": "speciaux",
-                    "title": "Champs spéciaux",
+                    "slug": "special",
+                    "title": "Special Fields",
                     "label_attr": {
                         "class": "h6"
                     },
@@ -1291,12 +1291,12 @@ Here's a complete example of a user registration form:
                         {
                             "key": "hidden_field",
                             "type": "hidden",
-                            "data": "valeur_cachee"
+                            "data": "hidden_value"
                         },
                         {
                             "key": "color_field",
                             "type": "color",
-                            "label": "Couleur",
+                            "label": "Color",
                             "required": false,
                             "data": "#3498db"
                         }
@@ -1306,10 +1306,10 @@ Here's a complete example of a user registration form:
         },
         {
             "slug": "collections",
-            "title": "Collections et formulaires imbriqués",
-            "description": "Formulaires dynamiques avec collections",
+            "title": "Collections and Nested Forms",
+            "description": "Dynamic forms with collections",
             "submit": {
-                "label": "Finaliser",
+                "label": "Finalize",
                 "class": "btn btn-success w-100 mt-4 rounded-pill"
             },
             "label_attr": {
@@ -1317,8 +1317,8 @@ Here's a complete example of a user registration form:
             },
             "categories": [
                 {
-                    "slug": "collection-complexe",
-                    "title": "Collection complexe",
+                    "slug": "complex-collection",
+                    "title": "Complex Collection",
                     "label_attr": {
                         "class": "h6"
                     },
@@ -1332,13 +1332,13 @@ Here's a complete example of a user registration form:
                             "allow_delete": true,
                             "prototype": true,
                             "button_add_options": {
-                                "label": "Ajouter un contact",
+                                "label": "Add Contact",
                                 "attr": {
                                     "class": "btn btn-success btn-sm mb-2"
                                 }
                             },
                             "button_delete_options": {
-                                "label": "Supprimer",
+                                "label": "Delete",
                                 "attr": {
                                     "class": "btn btn-outline-danger btn-sm"
                                 }
@@ -1347,14 +1347,14 @@ Here's a complete example of a user registration form:
                                 {
                                     "key": "nom",
                                     "type": "text",
-                                    "label": "Nom",
+                                    "label": "Name",
                                     "required": true,
                                     "constraints": {
                                         "Length": {
                                             "min": 2,
                                             "max": 50,
-                                            "minMessage": "Le nom doit contenir au moins {{ limit }} caractères",
-                                            "maxMessage": "Le nom ne peut pas dépasser {{ limit }} caractères"
+                                            "minMessage": "Name must contain at least {{ limit }} characters",
+                                            "maxMessage": "Name cannot exceed {{ limit }} characters"
                                         }
                                     },
                                     "attr": {
@@ -1368,7 +1368,7 @@ Here's a complete example of a user registration form:
                                     "required": true,
                                     "constraints": {
                                         "Email": {
-                                            "message": "Adresse email invalide"
+                                            "message": "Invalid email address"
                                         }
                                     },
                                     "attr": {
@@ -1378,12 +1378,12 @@ Here's a complete example of a user registration form:
                                 {
                                     "key": "telephone",
                                     "type": "tel",
-                                    "label": "Téléphone",
+                                    "label": "Phone",
                                     "required": false,
                                     "constraints": {
                                         "Regex": {
                                             "pattern": "/^[0-9+\\-\\s\\(\\)]+$/",
-                                            "message": "Format de téléphone invalide"
+                                            "message": "Invalid phone format"
                                         }
                                     },
                                     "attr": {
@@ -1401,7 +1401,7 @@ Here's a complete example of a user registration form:
         }
     ],
     "submit": {
-        "label": "Envoyer le formulaire complet",
+        "label": "Submit Complete Form",
         "class": "btn btn-success btn-lg w-100"
     }
 }
